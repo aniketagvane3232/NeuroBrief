@@ -27,15 +27,9 @@ function SearchResult() {
       setError(null);
 
       try {
-        const query =
-          decodeURIComponent(searchQuery).trim();
+        const query = decodeURIComponent(searchQuery).trim();
 
-        // =====================================================
-        // .NET BACKEND
-        // =====================================================
-
-        const API_BASE =
-          import.meta.env.VITE_API_URL;
+        const API_BASE = import.meta.env.VITE_API_URL;
 
         const url =
           `${API_BASE}/api/search/semantic` +
@@ -52,8 +46,7 @@ function SearchResult() {
         );
 
         if (!response.ok) {
-          const errorText =
-            await response.text();
+          const errorText = await response.text();
 
           console.error(
             "Backend search error:",
@@ -65,17 +58,12 @@ function SearchResult() {
           );
         }
 
-        const result =
-          await response.json();
+        const result = await response.json();
 
         console.log(
           "Semantic search response:",
           result
         );
-
-        // =====================================================
-        // CHECK BACKEND RESPONSE
-        // =====================================================
 
         if (
           !result.success ||
@@ -85,19 +73,42 @@ function SearchResult() {
           return;
         }
 
-        // =====================================================
-        // CONVERT RESULTS
-        // =====================================================
+        /*
+         * Backend semantic-search response can be:
+         *
+         * {
+         *   article: {...},
+         *   relevanceScore: 0.95
+         * }
+         *
+         * or directly:
+         *
+         * {
+         *   id: 1,
+         *   title: "..."
+         * }
+         *
+         * Normalize both formats here.
+         */
 
-        const articles =
-          result.results.map((item) => ({
-            ...(item.article || {}),
+        const articles = result.results.map((item) => {
+          const article = item.article || item;
 
-            relevanceScore:
-              Number(
-                item.relevanceScore ?? 0
-              )
-          }));
+          return {
+            ...article,
+
+            // VERY IMPORTANT:
+            // Keep the database article ID.
+            id:
+              article.id ||
+              article.articleId ||
+              item.articleId,
+
+            relevanceScore: Number(
+              item.relevanceScore ?? 0
+            )
+          };
+        });
 
         console.log(
           "Articles returned:",
@@ -105,7 +116,6 @@ function SearchResult() {
         );
 
         setData(articles);
-
       } catch (error) {
         console.error(
           "Semantic search error:",
@@ -125,26 +135,25 @@ function SearchResult() {
     fetchSearchResults();
   }, [searchQuery]);
 
-  // =========================================================
-  // DISPLAY QUERY
-  // =========================================================
-
-  const displayQuery =
-    searchQuery
-      ? decodeURIComponent(searchQuery)
-      : "";
-
-  // =========================================================
-  // RENDER
-  // =========================================================
+  const displayQuery = searchQuery
+    ? decodeURIComponent(searchQuery)
+    : "";
 
   return (
     <>
+      {/* ================================
+          ERROR
+      ================================= */}
+
       {error && (
         <div className="text-red-500 mb-4 text-center">
           {error}
         </div>
       )}
+
+      {/* ================================
+          SEARCH TITLE
+      ================================= */}
 
       {!isLoading && (
         <div className="text-center mt-6">
@@ -167,9 +176,9 @@ function SearchResult() {
         </div>
       )}
 
-      {/* =====================================================
+      {/* ================================
           ARTICLES
-      ===================================================== */}
+      ================================= */}
 
       <div className="my-10 cards grid lg:place-content-center md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 xs:grid-cols-1 xs:gap-4 md:gap-10 lg:gap-14 md:px-16 xs:p-3">
 
@@ -180,26 +189,41 @@ function SearchResult() {
             <div
               key={
                 element.id ||
+                element.articleId ||
                 element.url ||
                 index
               }
               className="relative"
             >
-
-              {/* =================================================
-                  SEMANTIC RELEVANCE
-              ================================================= */}
+              {/* ================================
+                  RELEVANCE SCORE
+              ================================= */}
 
               <div className="absolute z-10 top-2 right-2 bg-black text-white text-xs px-2 py-1 rounded">
                 Relevance:{" "}
                 {Math.round(
-                  (element.relevanceScore || 0) *
-                    100
+                  (element.relevanceScore || 0) * 100
                 )}
                 %
               </div>
 
+              {/* ================================
+                  ARTICLE CARD
+              ================================= */}
+
               <EverythingCard
+                /*
+                 * IMPORTANT
+                 *
+                 * Pass database article ID.
+                 * EverythingCard can use this ID
+                 * to open the article details page.
+                 */
+                id={
+                  element.id ||
+                  element.articleId
+                }
+
                 title={
                   element.title ||
                   "Untitled"
@@ -240,7 +264,6 @@ function SearchResult() {
                       "Unknown"
                 }
               />
-
             </div>
           ))
         ) : (
@@ -249,7 +272,6 @@ function SearchResult() {
             {displayQuery}"
           </div>
         )}
-
       </div>
     </>
   );
