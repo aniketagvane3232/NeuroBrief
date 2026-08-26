@@ -90,7 +90,7 @@ function TopHeadlines({ onArticleClick }) {
 
             const saveResponse =
               await fetch(
-                '${import.meta.env.VITE_API_URL}/api/articles/sync',
+                `${import.meta.env.VITE_API_URL}/api/articles/sync`,
                 {
                   method: "POST",
 
