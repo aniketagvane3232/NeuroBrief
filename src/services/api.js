@@ -61,9 +61,9 @@ export const api = {
         request(`/articles/${id}`),
 
     search: (query) =>
-        request(
-            `/articles?search=${encodeURIComponent(query)}`
-        ),
+    request(
+        `/search/semantic?query=${encodeURIComponent(query)}`
+    ),
 
     bookmarks: () =>
         request("/bookmarks"),
