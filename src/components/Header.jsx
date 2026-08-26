@@ -1,1068 +1,267 @@
-/* =========================================================
-   NEUROBRIEF
-   APP.CSS
-   Responsive Desktop + Tablet + Mobile
-   ========================================================= */
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleArrowDown } from "@fortawesome/free-solid-svg-icons";
 
+function Header() {
+  const [active, setActive] = useState(false);
+  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
+  const [theme, setTheme] = useState("light-theme");
+  const [isChecked, setIsChecked] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
-/* =========================================================
-   GLOBAL
-   ========================================================= */
+  const navigate = useNavigate();
 
-* {
-  box-sizing: border-box;
-}
+  const category = [
+    "business",
+    "entertainment",
+    "general",
+    "health",
+    "science",
+    "sports",
+    "technology",
+    "politics",
+  ];
 
-html,
-body,
-#root {
-  width: 100%;
-  min-height: 100%;
-  margin: 0;
-  padding: 0;
-}
+  useEffect(() => {
+    document.body.className = theme;
+  }, [theme]);
 
-body {
-  overflow-x: hidden;
-  font-family: Arial, Helvetica, sans-serif;
-}
+  function handleSearch(e) {
+    e.preventDefault();
 
-img {
-  max-width: 100%;
-  height: auto;
-}
+    if (searchTerm.trim()) {
+      navigate(`/search/${encodeURIComponent(searchTerm.trim())}`);
+      setActive(false);
+    }
+  }
 
-button,
-input,
-a {
-  -webkit-tap-highlight-color: transparent;
-}
+  function toggleTheme() {
+    setTheme((prevTheme) =>
+      prevTheme === "light-theme" ? "dark-theme" : "light-theme"
+    );
+  }
 
-button {
-  touch-action: manipulation;
-}
+  function handleCheckboxChange() {
+    setIsChecked((prev) => !prev);
+    toggleTheme();
+  }
 
+  function closeMobileMenu() {
+    setActive(false);
+    setShowCategoryDropdown(false);
+  }
 
-/* =========================================================
-   LOGIN PAGE
-   ========================================================= */
+  function toggleCategoryDropdown(e) {
+    e.preventDefault();
+    setShowCategoryDropdown((prev) => !prev);
+  }
 
-.login-container {
-  min-height: 100vh;
-  width: 100%;
+  return (
+    <header className="site-header">
+      <nav className="navbar">
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+        {/* ================= LOGO ================= */}
 
-  padding: 20px;
+        <Link
+          to="/"
+          className="logo-container"
+          onClick={closeMobileMenu}
+        >
+          <h3 className="logo-text">
+            NeuroBrief
+          </h3>
+        </Link>
 
-  background: linear-gradient(
-    145deg,
-    #7eafff,
-    #bcb0ff
+        {/* ================= DESKTOP / MOBILE MENU ================= */}
+
+        <div className={`nav-menu-wrapper ${active ? "menu-open" : ""}`}>
+          <ul className="nav-ul">
+
+            {/* ================= SEARCH ================= */}
+
+            <li className="nav-search-item">
+              <form
+                onSubmit={handleSearch}
+                className="header-search-form"
+              >
+                <input
+                  type="text"
+                  placeholder="Search News..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="header-search-input"
+                />
+
+                <button
+                  type="submit"
+                  className="header-search-button"
+                  aria-label="Search"
+                >
+                  🔍
+                </button>
+              </form>
+            </li>
+
+            {/* ================= ALL NEWS ================= */}
+
+            <li>
+              <Link
+                to="/"
+                className="header-link"
+                onClick={closeMobileMenu}
+              >
+                All News
+              </Link>
+            </li>
+
+            {/* ================= TOP HEADLINES ================= */}
+
+            <li className="dropdown-li">
+
+              <button
+                className="header-link dropdown-button"
+                onClick={toggleCategoryDropdown}
+                type="button"
+              >
+                Top Headlines
+
+                <FontAwesomeIcon
+                  className={
+                    showCategoryDropdown
+                      ? "down-arrow-icon down-arrow-icon-active"
+                      : "down-arrow-icon"
+                  }
+                  icon={faCircleArrowDown}
+                />
+              </button>
+
+              <ul
+                className={
+                  showCategoryDropdown
+                    ? "dropdown show-dropdown"
+                    : "dropdown"
+                }
+              >
+                {category.map((element) => (
+                  <li key={element}>
+                    <Link
+                      to={`/top-headlines/${element}`}
+                      className="dropdown-link"
+                      onClick={closeMobileMenu}
+                    >
+                      {element}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </li>
+
+            {/* ================= RECOMMENDATION ================= */}
+
+            <li>
+              <Link
+                to="/Recommended"
+                className="header-action-link"
+                onClick={closeMobileMenu}
+              >
+                Recommendation
+              </Link>
+            </li>
+
+            {/* ================= DASHBOARD ================= */}
+
+            <li>
+              <Link
+                to="/dashboard"
+                className="header-action-link"
+                onClick={closeMobileMenu}
+              >
+                Dashboard
+              </Link>
+            </li>
+
+            {/* ================= SIGN IN ================= */}
+
+            <li>
+              <Link
+                to="/login"
+                className="header-action-link"
+                onClick={closeMobileMenu}
+              >
+                Sign In
+              </Link>
+            </li>
+
+            {/* ================= PROFILE ================= */}
+
+            <li>
+              <Link
+                to="/profile"
+                className="header-action-link"
+                onClick={closeMobileMenu}
+              >
+                My Profile
+              </Link>
+            </li>
+
+            {/* ================= AI ================= */}
+
+            <li>
+              <Link
+                to="/ai"
+                className="header-action-link"
+                onClick={closeMobileMenu}
+              >
+                AI Assistant
+              </Link>
+            </li>
+
+            {/* ================= DARK MODE ================= */}
+
+            <li className="theme-item">
+              <input
+                type="checkbox"
+                className="checkbox hidden"
+                id="checkbox"
+                checked={isChecked}
+                onChange={handleCheckboxChange}
+              />
+
+              <label
+                htmlFor="checkbox"
+                className="checkbox-label"
+                aria-label="Toggle dark mode"
+              >
+                <i className="fas fa-moon"></i>
+                <i className="fas fa-sun"></i>
+                <span className="ball"></span>
+              </label>
+            </li>
+
+          </ul>
+        </div>
+
+        {/* ================= HAMBURGER ================= */}
+
+        <button
+          type="button"
+          className={`ham-burger ${active ? "ham-open" : ""}`}
+          onClick={() => {
+            setActive((prev) => !prev);
+            setShowCategoryDropdown(false);
+          }}
+          aria-label={active ? "Close menu" : "Open menu"}
+          aria-expanded={active}
+        >
+          <span className="lines line-1"></span>
+          <span className="lines line-2"></span>
+          <span className="lines line-3"></span>
+        </button>
+
+      </nav>
+    </header>
   );
 }
 
-.login-popup {
-  width: 100%;
-  max-width: 380px;
-
-  padding: 25px;
-
-  background-color: white;
-
-  border-radius: 12px;
-
-  box-shadow:
-    0 4px 20px rgba(0, 0, 0, 0.15);
-}
-
-.login-popup h2 {
-  text-align: center;
-
-  margin: 0 0 20px;
-
-  color: #333;
-
-  font-size: 26px;
-}
-
-.input-group {
-  margin-bottom: 15px;
-}
-
-.input-group label {
-  display: block;
-
-  margin-bottom: 6px;
-
-  font-weight: bold;
-
-  color: #555;
-}
-
-.input-group input {
-  width: 100%;
-
-  min-height: 44px;
-
-  padding: 12px;
-
-  border: 1px solid #ccc;
-
-  border-radius: 6px;
-
-  font-size: 15px;
-
-  outline: none;
-}
-
-.input-group input:focus {
-  border-color: #007bff;
-
-  box-shadow:
-    0 0 0 2px rgba(0, 123, 255, 0.1);
-}
-
-.error-text {
-  color: red;
-
-  text-align: center;
-
-  margin-top: 10px;
-
-  font-size: 14px;
-}
-
-.login-btn {
-  width: 100%;
-
-  min-height: 46px;
-
-  padding: 11px 15px;
-
-  background-color: #007bff;
-
-  color: white;
-
-  border: none;
-
-  border-radius: 6px;
-
-  cursor: pointer;
-
-  font-size: 16px;
-
-  font-weight: 600;
-
-  transition: background-color 0.2s ease;
-}
-
-.login-btn:hover {
-  background-color: #0056b3;
-}
-
-.signup-text {
-  text-align: center;
-
-  margin-top: 15px;
-
-  color: #555;
-
-  font-size: 14px;
-}
-
-.signup-text a {
-  color: #007bff;
-
-  text-decoration: none;
-}
-
-.signup-text a:hover {
-  text-decoration: underline;
-}
-
-
-/* =========================================================
-   NEUROBRIEF HEADER
-   ========================================================= */
-
-.site-header {
-  width: 100%;
-
-  position: sticky;
-  top: 0;
-
-  z-index: 1000;
-}
-
-
-/* ---------- NAVBAR ---------- */
-
-.navbar {
-  width: 100%;
-
-  min-height: 70px;
-
-  padding: 10px 24px;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  gap: 20px;
-
-  background: #1f2937;
-
-  box-shadow:
-    0 2px 10px rgba(0, 0, 0, 0.15);
-
-  position: relative;
-}
-
-
-/* =========================================================
-   LOGO
-   ========================================================= */
-
-.logo-container {
-  display: flex;
-
-  align-items: center;
-
-  flex-shrink: 0;
-
-  text-decoration: none;
-
-  cursor: pointer;
-}
-
-.logo-text {
-  margin: 0;
-
-  font-size: 25px;
-
-  font-weight: 800;
-
-  letter-spacing: 0.5px;
-
-  color: transparent;
-
-  background:
-    linear-gradient(
-      90deg,
-      #93c5fd,
-      #a855f7,
-      #ec4899
-    );
-
-  background-clip: text;
-
-  -webkit-background-clip: text;
-
-  -webkit-text-fill-color: transparent;
-
-  white-space: nowrap;
-}
-
-
-/* =========================================================
-   MENU WRAPPER
-   ========================================================= */
-
-.nav-menu-wrapper {
-  flex: 1;
-
-  display: flex;
-
-  justify-content: flex-end;
-
-  align-items: center;
-
-  min-width: 0;
-}
-
-
-/* =========================================================
-   NAVIGATION
-   ========================================================= */
-
-.nav-ul {
-  display: flex;
-
-  align-items: center;
-
-  justify-content: flex-end;
-
-  gap: 14px;
-
-  margin: 0;
-
-  padding: 0;
-
-  list-style: none;
-}
-
-.nav-ul li {
-  position: relative;
-
-  white-space: nowrap;
-}
-
-
-/* =========================================================
-   HEADER LINKS
-   ========================================================= */
-
-.header-link {
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  gap: 7px;
-
-  min-height: 40px;
-
-  padding: 8px 10px;
-
-  color: white;
-
-  text-decoration: none;
-
-  font-size: 14px;
-
-  font-weight: 600;
-
-  border: none;
-
-  background: transparent;
-
-  cursor: pointer;
-
-  border-radius: 7px;
-
-  transition:
-    background 0.2s ease,
-    color 0.2s ease;
-}
-
-.header-link:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-
-/* =========================================================
-   SEARCH
-   ========================================================= */
-
-.nav-search-item {
-  flex-shrink: 1;
-}
-
-.header-search-form {
-  display: flex;
-
-  align-items: stretch;
-
-  width: 250px;
-
-  max-width: 100%;
-}
-
-.header-search-input {
-  width: 100%;
-
-  min-width: 0;
-
-  min-height: 40px;
-
-  padding: 9px 12px;
-
-  border: 1px solid #d1d5db;
-
-  border-right: none;
-
-  border-radius: 7px 0 0 7px;
-
-  background: white;
-
-  color: #111827;
-
-  font-size: 14px;
-
-  outline: none;
-}
-
-.header-search-input:focus {
-  border-color: #3b82f6;
-}
-
-.header-search-button {
-  min-width: 45px;
-
-  min-height: 40px;
-
-  padding: 8px 10px;
-
-  border: none;
-
-  border-radius: 0 7px 7px 0;
-
-  background: #3b82f6;
-
-  color: white;
-
-  cursor: pointer;
-
-  transition: background 0.2s ease;
-}
-
-.header-search-button:hover {
-  background: #2563eb;
-}
-
-
-/* =========================================================
-   ACTION LINKS
-   ========================================================= */
-
-.header-action-link {
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  min-height: 40px;
-
-  padding: 8px 11px;
-
-  border-radius: 7px;
-
-  color: white;
-
-  text-decoration: none;
-
-  font-size: 14px;
-
-  font-weight: 600;
-
-  background: #2563eb;
-
-  transition:
-    background 0.2s ease,
-    transform 0.2s ease;
-}
-
-.header-action-link:hover {
-  background: #1d4ed8;
-
-  transform: translateY(-1px);
-}
-
-
-/* =========================================================
-   DROPDOWN
-   ========================================================= */
-
-.dropdown-li {
-  position: relative;
-}
-
-.dropdown-button {
-  font-family: inherit;
-}
-
-.down-arrow-icon {
-  font-size: 12px;
-
-  transition:
-    transform 0.2s ease;
-}
-
-.down-arrow-icon-active {
-  transform: rotate(180deg);
-}
-
-.dropdown {
-  display: none;
-
-  position: absolute;
-
-  top: calc(100% + 8px);
-
-  left: 0;
-
-  width: 190px;
-
-  margin: 0;
-
-  padding: 8px;
-
-  list-style: none;
-
-  background: white;
-
-  border-radius: 10px;
-
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.18);
-
-  z-index: 2000;
-}
-
-.dropdown.show-dropdown {
-  display: block;
-}
-
-.dropdown li {
-  width: 100%;
-
-  margin: 0;
-
-  padding: 0;
-}
-
-.dropdown-link {
-  display: flex;
-
-  width: 100%;
-
-  padding: 10px 12px;
-
-  border-radius: 7px;
-
-  color: #1f2937;
-
-  text-decoration: none;
-
-  text-transform: capitalize;
-
-  font-size: 14px;
-
-  font-weight: 500;
-
-  transition: background 0.2s ease;
-}
-
-.dropdown-link:hover {
-  background: #f3f4f6;
-}
-
-
-/* =========================================================
-   DARK MODE
-   ========================================================= */
-
-.theme-item {
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-}
-
-.checkbox {
-  display: none;
-}
-
-.checkbox-label {
-  width: 54px;
-
-  height: 27px;
-
-  padding: 3px;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  position: relative;
-
-  border-radius: 50px;
-
-  background: #111827;
-
-  cursor: pointer;
-}
-
-.checkbox-label i {
-  color: #facc15;
-
-  font-size: 13px;
-
-  z-index: 1;
-}
-
-.checkbox-label .fa-sun {
-  color: #f59e0b;
-}
-
-.checkbox-label .ball {
-  width: 21px;
-
-  height: 21px;
-
-  position: absolute;
-
-  top: 3px;
-
-  left: 3px;
-
-  border-radius: 50%;
-
-  background: white;
-
-  transition:
-    transform 0.25s ease;
-}
-
-.checkbox:checked + .checkbox-label .ball {
-  transform: translateX(27px);
-}
-
-
-/* =========================================================
-   HAMBURGER
-   ========================================================= */
-
-.ham-burger {
-  display: none;
-
-  width: 44px;
-
-  height: 44px;
-
-  padding: 0;
-
-  border: none;
-
-  border-radius: 8px;
-
-  background: transparent;
-
-  cursor: pointer;
-
-  align-items: center;
-
-  justify-content: center;
-
-  flex-direction: column;
-
-  gap: 5px;
-
-  flex-shrink: 0;
-}
-
-.ham-burger:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.lines {
-  display: block;
-
-  width: 25px;
-
-  height: 3px;
-
-  border-radius: 5px;
-
-  background: white;
-
-  transition:
-    transform 0.25s ease,
-    opacity 0.25s ease;
-}
-
-
-/* Hamburger → X */
-
-.ham-open .line-1 {
-  transform: translateY(8px) rotate(45deg);
-}
-
-.ham-open .line-2 {
-  opacity: 0;
-}
-
-.ham-open .line-3 {
-  transform: translateY(-8px) rotate(-45deg);
-}
-
-
-/* =========================================================
-   TABLET
-   ========================================================= */
-
-@media screen and (max-width: 1150px) {
-
-  .navbar {
-    padding: 10px 18px;
-
-    gap: 12px;
-  }
-
-  .logo-text {
-    font-size: 22px;
-  }
-
-  .nav-ul {
-    gap: 7px;
-  }
-
-  .header-link,
-  .header-action-link {
-    font-size: 13px;
-
-    padding-left: 8px;
-
-    padding-right: 8px;
-  }
-
-  .header-search-form {
-    width: 200px;
-  }
-}
-
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
-
-@media screen and (max-width: 850px) {
-
-  .navbar {
-    min-height: 64px;
-
-    padding: 8px 14px;
-
-    gap: 10px;
-  }
-
-  .logo-text {
-    font-size: 21px;
-  }
-
-  /* Show hamburger */
-
-  .ham-burger {
-    display: flex;
-  }
-
-  /* Mobile menu */
-
-  .nav-menu-wrapper {
-    display: none;
-
-    position: absolute;
-
-    top: 64px;
-
-    left: 0;
-
-    right: 0;
-
-    width: 100%;
-
-    padding: 12px;
-
-    background: #1f2937;
-
-    box-shadow:
-      0 10px 25px rgba(0, 0, 0, 0.2);
-
-    max-height: calc(100vh - 64px);
-
-    overflow-y: auto;
-  }
-
-  .nav-menu-wrapper.menu-open {
-    display: block;
-  }
-
-  .nav-ul {
-    width: 100%;
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: stretch;
-
-    justify-content: flex-start;
-
-    gap: 7px;
-  }
-
-  .nav-ul li {
-    width: 100%;
-  }
-
-
-  /* Search */
-
-  .nav-search-item {
-    width: 100%;
-  }
-
-  .header-search-form {
-    width: 100%;
-
-    max-width: none;
-  }
-
-  .header-search-input {
-    min-height: 45px;
-
-    font-size: 16px;
-  }
-
-  .header-search-button {
-    min-height: 45px;
-
-    min-width: 50px;
-  }
-
-
-  /* Links */
-
-  .header-link,
-  .header-action-link {
-    width: 100%;
-
-    min-height: 46px;
-
-    justify-content: flex-start;
-
-    padding: 11px 14px;
-
-    font-size: 15px;
-
-    border-radius: 8px;
-  }
-
-  .header-action-link {
-    background: #2563eb;
-  }
-
-
-  /* Dropdown */
-
-  .dropdown {
-    position: static;
-
-    width: 100%;
-
-    margin-top: 5px;
-
-    padding: 5px;
-
-    border-radius: 8px;
-
-    box-shadow: none;
-
-    background: #f9fafb;
-  }
-
-  .dropdown-link {
-    min-height: 42px;
-
-    padding: 10px 14px;
-
-    font-size: 14px;
-  }
-
-
-  /* Theme */
-
-  .theme-item {
-    width: 100%;
-
-    justify-content: flex-start;
-
-    padding: 8px 4px;
-  }
-}
-
-
-/* =========================================================
-   SMALL PHONES
-   ========================================================= */
-
-@media screen and (max-width: 480px) {
-
-  .navbar {
-    min-height: 58px;
-
-    padding: 7px 10px;
-  }
-
-  .logo-text {
-    font-size: 19px;
-  }
-
-  .ham-burger {
-    width: 42px;
-
-    height: 42px;
-  }
-
-  .nav-menu-wrapper {
-    top: 58px;
-
-    padding: 10px;
-  }
-
-  .header-search-input {
-    font-size: 16px;
-  }
-}
-
-
-/* =========================================================
-   VERY SMALL PHONES
-   ========================================================= */
-
-@media screen and (max-width: 360px) {
-
-  .navbar {
-    padding-left: 8px;
-
-    padding-right: 8px;
-  }
-
-  .logo-text {
-    font-size: 17px;
-  }
-
-  .header-action-link,
-  .header-link {
-    font-size: 14px;
-  }
-}
-
-
-/* =========================================================
-   LOGIN - TABLET
-   ========================================================= */
-
-@media screen and (max-width: 768px) {
-
-  .login-container {
-    padding: 16px;
-  }
-
-  .login-popup {
-    max-width: 420px;
-
-    padding: 22px;
-  }
-
-  .login-popup h2 {
-    font-size: 24px;
-  }
-}
-
-
-/* =========================================================
-   LOGIN - MOBILE
-   ========================================================= */
-
-@media screen and (max-width: 600px) {
-
-  .login-container {
-    min-height: 100dvh;
-
-    padding: 15px;
-  }
-
-  .login-popup {
-    width: 100%;
-
-    max-width: 100%;
-
-    padding: 20px 16px;
-
-    border-radius: 12px;
-  }
-
-  .login-popup h2 {
-    font-size: 22px;
-
-    margin-bottom: 18px;
-  }
-
-  .input-group {
-    margin-bottom: 14px;
-  }
-
-  .input-group label {
-    font-size: 14px;
-  }
-
-  .input-group input {
-    font-size: 16px;
-
-    padding: 12px;
-  }
-
-  .login-btn {
-    font-size: 16px;
-
-    min-height: 48px;
-  }
-
-  .signup-text {
-    font-size: 14px;
-  }
-}
-
-
-/* =========================================================
-   LOGIN - SMALL PHONES
-   ========================================================= */
-
-@media screen and (max-width: 380px) {
-
-  .login-container {
-    padding: 10px;
-  }
-
-  .login-popup {
-    padding: 18px 14px;
-  }
-
-  .login-popup h2 {
-    font-size: 20px;
-  }
-}
-
-
-/* =========================================================
-   LANDSCAPE MOBILE
-   ========================================================= */
-
-@media screen and (max-height: 500px)
-  and (orientation: landscape) {
-
-  .login-container {
-    align-items: flex-start;
-
-    padding-top: 20px;
-
-    padding-bottom: 20px;
-
-    overflow-y: auto;
-  }
-
-  .login-popup {
-    margin: 10px auto;
-  }
-}
+export default Header;

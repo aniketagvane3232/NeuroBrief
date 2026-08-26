@@ -739,9 +739,8 @@ button {
 
   .navbar {
     min-height: 64px;
-
+    height: 64px;
     padding: 8px 14px;
-
     gap: 10px;
   }
 
@@ -749,33 +748,27 @@ button {
     font-size: 21px;
   }
 
-  /* Show hamburger */
-
   .ham-burger {
     display: flex;
+    margin-left: auto;
+    flex-shrink: 0;
   }
 
-  /* Mobile menu */
-
+  /* Complete mobile header panel */
   .nav-menu-wrapper {
     display: none;
-
     position: absolute;
-
     top: 64px;
-
     left: 0;
-
     right: 0;
-
     width: 100%;
-
-    padding: 12px;
-
+    padding: 12px 14px 16px;
     background: #1f2937;
-
-    box-shadow:
-      0 10px 25px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    max-height: calc(100dvh - 64px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .nav-menu-wrapper.menu-open {
@@ -784,104 +777,88 @@ button {
 
   .nav-ul {
     width: 100%;
-
     display: flex;
-
     flex-direction: column;
-
     align-items: stretch;
-
     justify-content: flex-start;
-
     gap: 7px;
+    margin: 0;
+    padding: 0;
   }
 
   .nav-ul li {
     width: 100%;
+    min-width: 0;
   }
-
-
-  /* Search */
 
   .nav-search-item {
     width: 100%;
   }
 
   .header-search-form {
+    display: flex;
     width: 100%;
-
     max-width: none;
   }
 
   .header-search-input {
+    width: 100%;
+    min-width: 0;
     min-height: 45px;
-
     font-size: 16px;
   }
 
   .header-search-button {
     min-height: 45px;
-
     min-width: 50px;
+    flex-shrink: 0;
   }
-
-
-  /* Links */
 
   .header-link,
   .header-action-link {
     width: 100%;
-
     min-height: 46px;
-
     justify-content: flex-start;
-
     padding: 11px 14px;
-
     font-size: 15px;
-
     border-radius: 8px;
+    white-space: normal;
   }
 
   .header-action-link {
     background: #2563eb;
   }
 
+  .dropdown-li {
+    width: 100%;
+  }
 
-  /* Dropdown */
+  .dropdown-button {
+    width: 100%;
+    justify-content: flex-start;
+  }
 
   .dropdown {
     position: static;
-
     width: 100%;
-
+    max-width: none;
     margin-top: 5px;
-
     padding: 5px;
-
     border-radius: 8px;
-
     box-shadow: none;
-
     background: #f9fafb;
   }
 
   .dropdown-link {
+    width: 100%;
     min-height: 42px;
-
     padding: 10px 14px;
-
     font-size: 14px;
   }
 
-
-  /* Theme */
-
   .theme-item {
     width: 100%;
-
     justify-content: flex-start;
-
     padding: 8px 4px;
   }
 }
@@ -911,7 +888,7 @@ button {
 
   .nav-menu-wrapper {
     top: 58px;
-
+    max-height: calc(100dvh - 58px);
     padding: 10px;
   }
 
