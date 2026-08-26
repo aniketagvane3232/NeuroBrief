@@ -17,7 +17,7 @@ function MyProfile() {
 
   const [activeSection, setActiveSection] = useState("profile");
 
-  const API_URL = "http://localhost:5251/api";
+  const API_URL = '${import.meta.env.VITE_API_URL}/api';
 
   // =========================================================
   // GET PROFILE

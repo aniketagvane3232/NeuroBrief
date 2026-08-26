@@ -79,7 +79,7 @@ const Modal = ({
     try {
       const response =
         await fetch(
-          "http://localhost:5251/api/bookmarks",
+          '${import.meta.env.VITE_API_URL}/api/bookmarks',
           {
             method: "POST",
 
@@ -178,7 +178,7 @@ const Modal = ({
       try {
         const response =
           await fetch(
-            "http://localhost:5251/api/reviews",
+            '${import.meta.env.VITE_API_URL}/api/reviews',
             {
               method: "POST",
 
@@ -412,7 +412,7 @@ ${articleText}
 
         const response =
           await fetch(
-            "http://localhost:5251/api/ai/generate",
+            '${import.meta.env.VITE_API_URL}/api/ai/generate',
             {
               method: "POST",
 

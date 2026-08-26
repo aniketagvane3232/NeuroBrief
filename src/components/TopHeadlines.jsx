@@ -61,7 +61,7 @@ function TopHeadlines({
 
           const response =
             await fetch(
-              `http://localhost:5251/api/articles/top-headlines/${encodeURIComponent(
+              `${import.meta.env.VITE_API_URL}/api/articles/top-headlines/${encodeURIComponent(
                 category
               )}?page=${page}&pageSize=${pageSize}`
             );

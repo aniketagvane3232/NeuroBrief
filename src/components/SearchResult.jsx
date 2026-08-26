@@ -35,7 +35,7 @@ function SearchResult() {
         // =====================================================
 
         const API_BASE =
-          "http://localhost:5251";
+          '${import.meta.env.VITE_API_URL}';
 
         const url =
           `${API_BASE}/api/search/semantic` +

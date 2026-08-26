@@ -33,7 +33,7 @@ function CountryNews() {
 
       try {
         const response = await fetch(
-          `http://localhost:5251/api/articles?country=${encodeURIComponent(
+          `${import.meta.env.VITE_API_URL}/api/articles?country=${encodeURIComponent(
             countryName
           )}`
         );

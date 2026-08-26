@@ -5,7 +5,7 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const API_URL = "http://localhost:5251/api";
+  const API_URL = `${import.meta.env.VITE_API_URL}/api`;
 
   const fetchDashboard = async () => {
     const token = localStorage.getItem("token");
@@ -31,9 +31,7 @@ function Dashboard() {
       const text = await response.text();
 
       if (!response.ok) {
-        throw new Error(
-          text || "Failed to load dashboard."
-        );
+        throw new Error(text || "Failed to load dashboard.");
       }
 
       const result = text ? JSON.parse(text) : {};
@@ -93,13 +91,10 @@ function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-6 pt-32">
-
       <div className="max-w-6xl mx-auto">
 
         {/* HEADER */}
-
         <div className="flex justify-between items-center mb-8">
-
           <div>
             <h1 className="text-4xl font-bold text-gray-800">
               Dashboard
@@ -116,15 +111,12 @@ function Dashboard() {
           >
             Refresh
           </button>
-
         </div>
 
         {/* STATISTICS */}
-
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
 
           {/* ARTICLES */}
-
           <div className="bg-white rounded-xl shadow-md p-6">
             <p className="text-gray-500 font-semibold">
               Total Articles
@@ -136,7 +128,6 @@ function Dashboard() {
           </div>
 
           {/* USERS */}
-
           <div className="bg-white rounded-xl shadow-md p-6">
             <p className="text-gray-500 font-semibold">
               Total Users
@@ -148,7 +139,6 @@ function Dashboard() {
           </div>
 
           {/* BOOKMARKS */}
-
           <div className="bg-white rounded-xl shadow-md p-6">
             <p className="text-gray-500 font-semibold">
               Total Bookmarks
@@ -160,7 +150,6 @@ function Dashboard() {
           </div>
 
           {/* REVIEWS */}
-
           <div className="bg-white rounded-xl shadow-md p-6">
             <p className="text-gray-500 font-semibold">
               Total Reviews
@@ -170,20 +159,16 @@ function Dashboard() {
               {reviews}
             </h2>
           </div>
-
         </div>
 
         {/* CATEGORIES */}
-
         <div className="bg-white rounded-xl shadow-md p-6">
-
           <h2 className="text-2xl font-bold text-gray-800 mb-5">
             Articles by Category
           </h2>
 
           {categories.length > 0 ? (
             <div className="space-y-4">
-
               {categories.map((item, index) => (
                 <div
                   key={index}
@@ -198,18 +183,15 @@ function Dashboard() {
                   </span>
                 </div>
               ))}
-
             </div>
           ) : (
             <p className="text-gray-500">
               No category data available.
             </p>
           )}
-
         </div>
 
       </div>
-
     </div>
   );
 }

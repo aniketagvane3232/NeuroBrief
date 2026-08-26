@@ -32,7 +32,7 @@ const SignUp = () => {
       setLoading(true);
 
       const response = await axios.post(
-        "http://localhost:5251/api/auth/register",
+        `${import.meta.env.VITE_API_URL}/api/auth/register`,
         {
           username: username,
           email: email,
@@ -76,7 +76,7 @@ const SignUp = () => {
         );
       } else {
         setError(
-          "Cannot connect to the backend. Make sure the API is running on port 5251."
+          "Cannot connect to the backend. Please try again."
         );
       }
     } finally {

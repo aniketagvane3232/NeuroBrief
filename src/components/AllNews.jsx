@@ -53,7 +53,7 @@ function AllNews() {
 
       try {
         const response = await fetch(
-          `http://localhost:5251/api/articles?page=${page}&pageSize=${pageSize}`
+          `${import.meta.env.VITE_API_URL}/api/articles?page=${page}&pageSize=${pageSize}`
         );
 
         if (!response.ok) {
@@ -199,7 +199,7 @@ function AllNews() {
 
     try {
       const response = await fetch(
-        `http://localhost:5251/api/articles/${articleId}/analysis`
+        `${import.meta.env.VITE_API_URL}/api/articles/${articleId}/analysis`
       );
 
       const result =

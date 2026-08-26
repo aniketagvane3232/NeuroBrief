@@ -7,3 +7,4 @@ export const store = configureStore({
     search: searchReducer, // Add searchReducer to the store
   },
 });
+

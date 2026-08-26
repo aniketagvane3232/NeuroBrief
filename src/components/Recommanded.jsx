@@ -30,7 +30,7 @@ function Recommended() {
         localStorage.getItem("token");
 
       const response = await fetch(
-        "http://localhost:5251/api/recommendation",
+        '${import.meta.env.VITE_API_URL}/api/recommendation',
         {
           method: "GET",
 

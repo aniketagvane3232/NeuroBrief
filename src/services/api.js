@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5251/api";
+const API_URL = `${import.meta.env.VITE_API_URL}/api`;
 
 async function request(endpoint, options = {}) {
     const token = localStorage.getItem("token");
@@ -112,3 +112,4 @@ export const api = {
         localStorage.removeItem("token");
     }
 };
+
