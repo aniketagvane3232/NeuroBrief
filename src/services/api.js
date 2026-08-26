@@ -62,9 +62,8 @@ export const api = {
 
     search: (query) =>
     request(
-        `/search/semantic?query=${encodeURIComponent(query)}`
+        `/search/semantic?q=${encodeURIComponent(query)}&limit=10`
     ),
-
     bookmarks: () =>
         request("/bookmarks"),
 
