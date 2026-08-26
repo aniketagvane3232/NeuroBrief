@@ -1,0 +1,119 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Full-screen background with the form centered horizontally */
+  .signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align form to start from the top */
+    min-height: 100vh; /* Ensures background covers entire height */
+    background: linear-gradient(145deg, #7eafff, #bcb0ff); /* Background remains full */
+    padding-top: 100px; /* Add padding to push form down */
+  }
+  
+  /* Card style for the form popup */
+  .signup-popup {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    width: 100%;
+    max-width: 750px; /* Increased width */
+    text-align: center;
+    
+  }
+  
+  /* Form header */
+  .signup-popup h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  /* Input group styling */
+  .input-group {
+    margin-bottom: 16px;
+    text-align: left;
+  }
+  
+  .input-group label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #555;
+  }
+  
+  .input-group input[type="text"],
+  .input-group input[type="email"],
+  .input-group input[type="password"],
+  .input-group input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  /* Button style */
+  .signup-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #4d7fff;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .signup-btn:hover {
+    background-color: #3d6fe6;
+  }
+  
+  /* Error message */
+  .error-text {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+  
+  /* Link to the login page */
+  .login-text {
+    margin-top: 20px;
+    font-size: 14px;
+  }
+  
+  .login-text a {
+    color: #4d7fff;
+    text-decoration: none;
+  }
+  
+  .login-text a:hover {
+    text-decoration: underline;
+  }
+  .input-group label {
+    display: flex;
+    align-items: center; /* Center checkbox and text vertically */
+    margin-bottom: 5px; /* Adjust margin to space out from input */
+  }
+  
+  /* Checkbox styling */
+  .input-group input[type="checkbox"] {
+    margin-right: 5px; /* Add space between checkbox and label */
+  }
+  .input-group label {
+    display: flex;
+    align-items: center; /* Center checkbox and text vertically */
+    margin-bottom: 5px; /* Adjust margin to space out from input */
+  }
+  
+  /* Remove margin from checkbox input to eliminate gap */
+  .input-group input[type="checkbox"] {
+    margin: 0; /* Remove default margin */
+    margin-right: 0; /* Ensure no right margin */
+    width: auto; /* Auto width to fit the checkbox */
+  }

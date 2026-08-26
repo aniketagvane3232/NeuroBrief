@@ -1,0 +1,22 @@
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-popup {
+  padding: 30px;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+.error-text {
+  color: red;
+}
+
+.login-btn {
+  cursor: pointer;
+}
