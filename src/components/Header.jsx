@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import countries from "./countries";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleArrowDown } from "@fortawesome/free-solid-svg-icons";
 
 function Header() {
   const [active, setActive] = useState(false);
+  const [showCountryDropdown, setShowCountryDropdown] = useState(false);
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
   const [theme, setTheme] = useState("light-theme");
   const [isChecked, setIsChecked] = useState(false);
@@ -27,18 +29,20 @@ function Header() {
     document.body.className = theme;
   }, [theme]);
 
+  // Handle search and navigation
   function handleSearch(e) {
     e.preventDefault();
 
     if (searchTerm.trim()) {
       navigate(`/search/${encodeURIComponent(searchTerm.trim())}`);
-      setActive(false);
     }
   }
 
   function toggleTheme() {
     setTheme((prevTheme) =>
-      prevTheme === "light-theme" ? "dark-theme" : "light-theme"
+      prevTheme === "light-theme"
+        ? "dark-theme"
+        : "light-theme"
     );
   }
 
@@ -47,84 +51,89 @@ function Header() {
     toggleTheme();
   }
 
-  function closeMobileMenu() {
-    setActive(false);
-    setShowCategoryDropdown(false);
-  }
-
-  function toggleCategoryDropdown(e) {
-    e.preventDefault();
-    setShowCategoryDropdown((prev) => !prev);
-  }
-
   return (
-    <header className="site-header">
-      <nav className="navbar">
+    <header>
+      <nav className="fixed top-0 left-0 w-full bg-gray-800 z-10 flex items-center justify-between p-4 shadow-md">
 
-        {/* ================= LOGO ================= */}
-
+        {/* Tactical Trends - CLICK TO GO HOME */}
         <Link
           to="/"
-          className="logo-container"
-          onClick={closeMobileMenu}
+          className="no-underline cursor-pointer"
+          onClick={() => {
+            setActive(false);
+            setShowCategoryDropdown(false);
+            setShowCountryDropdown(false);
+          }}
         >
-          <h3 className="logo-text">
-            NeuroBrief
+          <h3 className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-200 via-purple-500 to-pink-500 drop-shadow-lg tracking-wide">
+            Tactical Trends
           </h3>
         </Link>
 
-        {/* ================= DESKTOP / MOBILE MENU ================= */}
+        <div className="flex-grow flex justify-center md:justify-end">
 
-        <div className={`nav-menu-wrapper ${active ? "menu-open" : ""}`}>
-          <ul className="nav-ul">
+          <ul className="nav-ul flex flex-wrap gap-6 justify-end">
 
-            {/* ================= SEARCH ================= */}
-
-            <li className="nav-search-item">
+            {/* Search */}
+            <li className="flex items-center">
               <form
                 onSubmit={handleSearch}
-                className="header-search-form"
+                className="flex items-center"
               >
                 <input
                   type="text"
                   placeholder="Search News..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="header-search-input"
+                  onChange={(e) =>
+                    setSearchTerm(e.target.value)
+                  }
+                  className="py-2 px-4 rounded-l-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
 
                 <button
                   type="submit"
-                  className="header-search-button"
-                  aria-label="Search"
+                  className="bg-blue-500 text-white py-2 px-4 rounded-r-md hover:bg-blue-600 transition duration-200"
                 >
-                  🔍
+                  <FontAwesomeIcon
+                    className={
+                      showCategoryDropdown
+                        ? "down-arrow-icon down-arrow-icon-active"
+                        : "down-arrow-icon"
+                    }
+                    icon={faCircleArrowDown}
+                  />
                 </button>
               </form>
             </li>
 
-            {/* ================= ALL NEWS ================= */}
-
+            {/* All News */}
             <li>
               <Link
+                className="no-underline font-semibold text-white"
                 to="/"
-                className="header-link"
-                onClick={closeMobileMenu}
+                onClick={() => setActive(!active)}
               >
                 All News
               </Link>
             </li>
 
-            {/* ================= TOP HEADLINES ================= */}
-
+            {/* Top Headlines */}
             <li className="dropdown-li">
 
-              <button
-                className="header-link dropdown-button"
-                onClick={toggleCategoryDropdown}
-                type="button"
+              <Link
+                to="#"
+                className="no-underline font-semibold flex items-center gap-2 text-white"
+                onClick={(e) => {
+                  e.preventDefault();
+
+                  setShowCategoryDropdown(
+                    !showCategoryDropdown
+                  );
+
+                  setShowCountryDropdown(false);
+                }}
               >
-                Top Headlines
+                Top-Headlines{" "}
 
                 <FontAwesomeIcon
                   className={
@@ -134,92 +143,160 @@ function Header() {
                   }
                   icon={faCircleArrowDown}
                 />
-              </button>
+              </Link>
 
               <ul
                 className={
                   showCategoryDropdown
-                    ? "dropdown show-dropdown"
-                    : "dropdown"
+                    ? "dropdown p-2 show-dropdown"
+                    : "dropdown p-2"
                 }
               >
-                {category.map((element) => (
-                  <li key={element}>
+                {category.map((element, index) => (
+                  <li
+                    key={index}
+                    onClick={() =>
+                      setShowCategoryDropdown(false)
+                    }
+                  >
                     <Link
                       to={`/top-headlines/${element}`}
-                      className="dropdown-link"
-                      onClick={closeMobileMenu}
+                      className="flex gap-3 capitalize text-gray-800"
+                      onClick={() =>
+                        setActive(false)
+                      }
                     >
                       {element}
                     </Link>
                   </li>
                 ))}
               </ul>
+
             </li>
 
-            {/* ================= RECOMMENDATION ================= */}
+            {/* Country - kept commented as in your file */}
+            {/*
+            <li className="dropdown-li">
+              <Link
+                className="no-underline font-semibold flex items-center gap-2 text-white"
+                onClick={() => {
+                  setShowCountryDropdown(!showCountryDropdown);
+                  setShowCategoryDropdown(false);
+                }}
+              >
+                Country{" "}
+                <FontAwesomeIcon
+                  className={
+                    showCountryDropdown
+                      ? "down-arrow-icon down-arrow-icon-active"
+                      : "down-arrow-icon"
+                  }
+                  icon={faCircleArrowDown}
+                />
+              </Link>
 
+              <ul
+                className={
+                  showCountryDropdown
+                    ? "dropdown p-2 show-dropdown"
+                    : "dropdown p-2"
+                }
+              >
+                {countries.map((element, index) => (
+                  <li
+                    key={index}
+                    onClick={() =>
+                      setShowCountryDropdown(
+                        !showCountryDropdown
+                      )
+                    }
+                  >
+                    <Link
+                      to={`/country/${element.iso_2_alpha}`}
+                      className="flex gap-3"
+                      onClick={() =>
+                        setActive(!active)
+                      }
+                    >
+                      <img
+                        src={element.png}
+                        srcSet={`https://flagcdn.com/32x24/${element.iso_2_alpha}.png 2x`}
+                        alt={element.countryName}
+                      />
+
+                      <span>
+                        {element.countryName}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </li>
+            */}
+
+            {/* Recommendation */}
             <li>
               <Link
-                to="/Recommended"
-                className="header-action-link"
-                onClick={closeMobileMenu}
+                className="no-underline font-semibold sign-in-btn"
+                to="./Recommended"
               >
-                Recommendation
+                <button className="sign-in-button">
+                  Recommendation
+                </button>
               </Link>
             </li>
 
-            {/* ================= DASHBOARD ================= */}
-
+            {/* Dashboard */}
             <li>
               <Link
+                className="no-underline font-semibold sign-in-btn"
                 to="/dashboard"
-                className="header-action-link"
-                onClick={closeMobileMenu}
               >
-                Dashboard
+                <button className="sign-in-button">
+                  Dashboard
+                </button>
               </Link>
             </li>
 
-            {/* ================= SIGN IN ================= */}
-
+            {/* Sign In */}
             <li>
               <Link
+                className="no-underline font-semibold sign-in-btn"
                 to="/login"
-                className="header-action-link"
-                onClick={closeMobileMenu}
               >
-                Sign In
+                <button className="sign-in-button">
+                  Sign In
+                </button>
               </Link>
             </li>
 
-            {/* ================= PROFILE ================= */}
-
+            {/* My Profile */}
             <li>
               <Link
+                className="no-underline font-semibold sign-in-btn"
                 to="/profile"
-                className="header-action-link"
-                onClick={closeMobileMenu}
               >
-                My Profile
+                <button className="sign-in-button">
+                  My profile
+                </button>
               </Link>
             </li>
 
-            {/* ================= AI ================= */}
-
+            {/* AI Assistant */}
             <li>
               <Link
+                className="no-underline font-semibold sign-in-btn"
                 to="/ai"
-                className="header-action-link"
-                onClick={closeMobileMenu}
               >
-                AI Assistant
+                <button className="sign-in-button">
+                  AI Assistant
+                </button>
               </Link>
             </li>
 
-            {/* ================= DARK MODE ================= */}
+            {/* Dark Mode */}
+            <li className="flex items-center">
 
-            <li className="theme-item">
               <input
                 type="checkbox"
                 className="checkbox hidden"
@@ -230,34 +307,32 @@ function Header() {
 
               <label
                 htmlFor="checkbox"
-                className="checkbox-label"
-                aria-label="Toggle dark mode"
+                className="checkbox-label cursor-pointer flex items-center"
               >
                 <i className="fas fa-moon"></i>
                 <i className="fas fa-sun"></i>
                 <span className="ball"></span>
               </label>
+
             </li>
 
           </ul>
+
         </div>
 
-        {/* ================= HAMBURGER ================= */}
-
-        <button
-          type="button"
-          className={`ham-burger ${active ? "ham-open" : ""}`}
-          onClick={() => {
-            setActive((prev) => !prev);
-            setShowCategoryDropdown(false);
-          }}
-          aria-label={active ? "Close menu" : "Open menu"}
-          aria-expanded={active}
+        {/* Hamburger */}
+        <div
+          className={
+            active
+              ? "ham-burger z-index-100 ham-open"
+              : "ham-burger z-index-100"
+          }
+          onClick={() => setActive(!active)}
         >
           <span className="lines line-1"></span>
           <span className="lines line-2"></span>
           <span className="lines line-3"></span>
-        </button>
+        </div>
 
       </nav>
     </header>
